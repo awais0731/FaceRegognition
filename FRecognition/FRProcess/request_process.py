@@ -14,7 +14,7 @@ class RequestProcess:
         
         base64 = ""
 
-        self.request_obj['directory_path'] = "D:/test_images/20240611132956402.jpg"
+       # self.request_obj['directory_path'] = "D:/test_images/20240611132956402.jpg"
         imagefile = self.request_obj['directory_path']
 
         #imagefile = self.request_obj['directory_path']
@@ -31,7 +31,6 @@ class RequestProcess:
             if base64 != "":
                 logging.info("Picture path before matching: " + imagefile)
                 data = FaceMatchAPIs.MatchedFace(float(0.58), base64, "search_dlmisdb")
-                
                 logging.info("Picture path after matching: " + imagefile)
                 print("result is",data)
                 print("here")
