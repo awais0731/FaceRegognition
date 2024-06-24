@@ -9,8 +9,11 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+<<<<<<< HEAD
 constant/
 myenv/
+=======
+>>>>>>> 6f1de718a50277538d33aeb7414b00f4ab3b6dc4
 develop-eggs/
 dist/
 downloads/
