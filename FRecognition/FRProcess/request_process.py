@@ -10,14 +10,6 @@ class RequestProcess:
 
     faceTypeList  = execute_stored_procedure(conn, procedure_name)
 
-    # @classmethod
-    # def set_face_type_list(cls, face_type_list):
-    #     cls._face_type_list = face_type_list
-
-    # @classmethod
-    # def get_face_type_list(cls):
-    #     return cls._face_type_list
-
     def __init__(self, request_obj):
         self.request_obj = request_obj
         self.myProcess()
@@ -43,13 +35,21 @@ class RequestProcess:
 
             if base64 != "":
                 for item in RequestProcess.faceTypeList:
-                    print(item)
-                logging.info("Picture path before matching: " + imagefile)
-                data = FaceMatchAPIs.MatchedFace(float(0.58), base64, "search_dlmisdb")
-                logging.info("Picture path after matching: " + imagefile)
-                print("result is",data)
-                print("here")
-     
+                    data = FaceMatchAPIs.MatchedFace(float(item.MatchingThreshold), base64, item.ApiEndPoint)
+                    
+                    if data is not None:
+                        if 'result' in data and data['result'] is not None:
+                            if 'paths' in data['result'] and len(data['result']['paths']) > 0:
+                                print(data)
+                                print("match from : ", item.ApiEndPoint)
+                            else:
+                                print("data not found from", item.ApiEndPoint)
+                        else:
+                            print("data not found from", item.ApiEndPoint)
+                    else:
+                        print("data not found from", item.ApiEndPoint, imagefile)
+                    
+                
         except Exception as e:
             raise FRException(e, sys)
 
