@@ -7,7 +7,7 @@ from FRecognition.singleton import Singleton
 
 if __name__ == "__main__":
 
-    dlims_distict_list = execute_stored_procedure(conn, DlimisRecord)
+    dlims_distict_list = execute_stored_procedure(conn, DlimisRecord,fetch=True)
     singleton = Singleton()
     singleton.set_dlims_distict_list(dlims_distict_list) #the purpose of the singleton class to execute storeprocedure only once
 

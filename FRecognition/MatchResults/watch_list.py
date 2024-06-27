@@ -1,4 +1,4 @@
-from FRecognition.utils.main_utils import execute_stored_procedure1
+from FRecognition.utils.main_utils import execute_stored_procedure
 from FRecognition.singleton import Singleton
 from FRecognition.constant import conn, InsertFRData
 
@@ -44,7 +44,7 @@ class WatchList:
                 #     parameters["CroNo"] = None
                 params_list = list(parameters.values())
 
-                execute_stored_procedure1(conn, InsertFRData, params=params_list)
+                execute_stored_procedure(conn, InsertFRData, params=params_list, fetch=True)
 
 
 

@@ -10,7 +10,10 @@ from FRecognition.MatchResults.watch_list import WatchList
 
 class RequestProcess:
 
-    faceTypeList  = execute_stored_procedure(conn, DBInfo)
+    faceTypeList  = execute_stored_procedure(conn, DBInfo, fetch=True)
+
+    for row in faceTypeList:
+        print(row)
 
     def __init__(self, request_obj):
       
