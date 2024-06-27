@@ -4,9 +4,11 @@ from FRecognition.RabbitMQ.message_receiver import MessageReceiver
 from FRecognition.exception import FRException
 import sys, os
 
+
 class RabbitMQKeys:
 
     def StartListner():
+
 
         try:
             credentials = pika.PlainCredentials(RabbitMQ_username, RabbitMQ_Password)
@@ -29,3 +31,6 @@ class RabbitMQKeys:
             
         except Exception as e:
             raise FRException(e, sys)
+        
+
+

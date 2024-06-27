@@ -6,6 +6,7 @@ import os, sys
 from requests.auth import HTTPProxyAuth
 import json
 import time
+from FRecognition.constant import WatchList, sourceWatchList
 
 class FaceMatchAPIs:
 
@@ -40,10 +41,21 @@ class FaceMatchAPIs:
                 "thresh": str(threshold),
                 "img": base64
             }
+            blackList_payload = {
+                "thresh": str(threshold),
+                "img": base64,
+                "dbname": str(WatchList)
+            }
 
             print("in middle")
 
-            response = session.post(FaceMatch_API_URL + FaceMatch_API_DBURL, data=payload)
+            if search_db == str(sourceWatchList):
+                response = session.post(FaceMatch_API_URL + FaceMatch_API_DBURL, data=blackList_payload)
+            else:
+                response = session.post(FaceMatch_API_URL + FaceMatch_API_DBURL, data=payload)
+
+
+
             if response.status_code == 202:
                 print(response.text)
                 location_obj = response.json()

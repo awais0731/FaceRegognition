@@ -1,4 +1,6 @@
 import base64
+from FRecognition.exception import FRException
+import os, sys
 
 
 def image_to_base64(image_path):
@@ -8,9 +10,24 @@ def image_to_base64(image_path):
         return base64_encoded
 
 
-def execute_stored_procedure(conn, procedure_name, *params):
-    cursor = conn.cursor()
-    cursor.execute("EXEC " + procedure_name + " " + ",".join(["?"] * len(params)), params)
-    rows = cursor.fetchall()
-    cursor.close()
-    return rows
+def execute_stored_procedure_to_get_DBInfo(conn, procedure_name, *params):
+    try:
+         
+        cursor = conn.cursor()
+        cursor.execute("EXEC " + procedure_name + " " + ",".join(["?"] * len(params)), params)
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
+    except Exception as e:
+         raise FRException(e, sys)
+
+def execute_stored_procedure_to_get_DlimisDistricit(conn, procedure_name, *params):
+    try:     
+        cursor = conn.cursor()
+        cursor.execute("EXEC " + procedure_name + " " + ",".join(["?"] * len(params)), params)
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
+    except Exception as e:
+         raise FRException(e, sys)
+         
