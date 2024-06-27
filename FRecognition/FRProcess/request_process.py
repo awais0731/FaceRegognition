@@ -4,12 +4,13 @@ from FRecognition.utils.main_utils import image_to_base64
 from FRecognition.logger import logging
 from FRecognition.FRProcess.face_match_api import FaceMatchAPIs
 from FRecognition.constant import conn, DBInfo, sourceWatchList
-from FRecognition.utils.main_utils import execute_stored_procedure_to_get_DBInfo
+from FRecognition.utils.main_utils import execute_stored_procedure
 from FRecognition.singleton import Singleton
+from FRecognition.MatchResults.watch_list import WatchList
 
 class RequestProcess:
 
-    faceTypeList  = execute_stored_procedure_to_get_DBInfo(conn, DBInfo)
+    faceTypeList  = execute_stored_procedure(conn, DBInfo)
 
     def __init__(self, request_obj):
       
@@ -45,9 +46,11 @@ class RequestProcess:
                         if 'result' in data and data['result'] is not None:
                             if 'paths' in data['result'] and len(data['result']['paths']) > 0:
                                 if item.ApiEndPoint == str(sourceWatchList):
-                                    print("fda")
+                                    print("not here")
+                                    WatchList.insert_FrMatch(self.request_obj, data, item.Id, bool(int(item.IsCro)), item.Name, float(item.MatchingThreshold))
                                 else:
-                                    print("watch list")
+                                    print("i am here")
+                                    WatchList.Insert_Details(self.request_obj, data, item.Id, bool(int(item.IsCro)), item.Name, float(item.MatchingThreshold))
                             else:
                                 print("data not found from", item.ApiEndPoint)
                         else:

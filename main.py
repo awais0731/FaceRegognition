@@ -1,5 +1,5 @@
 from FRecognition.RabbitMQ.rabbitmq_keys import RabbitMQKeys
-from FRecognition.utils.main_utils import execute_stored_procedure_to_get_DlimisDistricit
+from FRecognition.utils.main_utils import execute_stored_procedure
 from FRecognition.constant import DlimisRecord, conn
 from FRecognition.singleton import Singleton
 
@@ -7,7 +7,7 @@ from FRecognition.singleton import Singleton
 
 if __name__ == "__main__":
 
-    dlims_distict_list = execute_stored_procedure_to_get_DlimisDistricit(conn, DlimisRecord)
+    dlims_distict_list = execute_stored_procedure(conn, DlimisRecord)
     singleton = Singleton()
     singleton.set_dlims_distict_list(dlims_distict_list) #the purpose of the singleton class to execute storeprocedure only once
 

@@ -53,8 +53,7 @@ class FaceMatchAPIs:
                 response = session.post(FaceMatch_API_URL + FaceMatch_API_DBURL, data=blackList_payload)
             else:
                 response = session.post(FaceMatch_API_URL + FaceMatch_API_DBURL, data=payload)
-
-
+                
 
             if response.status_code == 202:
                 print(response.text)
