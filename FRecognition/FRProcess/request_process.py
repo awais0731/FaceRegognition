@@ -7,13 +7,11 @@ from FRecognition.constant import conn, DBInfo, sourceWatchList
 from FRecognition.utils.main_utils import execute_stored_procedure
 from FRecognition.singleton import Singleton
 from FRecognition.MatchResults.watch_list import WatchList
+from FRecognition.MatchResults.multi_db_insert import MultiDBInsert
 
 class RequestProcess:
 
     faceTypeList  = execute_stored_procedure(conn, DBInfo, fetch=True)
-
-    for row in faceTypeList:
-        print(row)
 
     def __init__(self, request_obj):
       
@@ -50,10 +48,10 @@ class RequestProcess:
                             if 'paths' in data['result'] and len(data['result']['paths']) > 0:
                                 if item.ApiEndPoint == str(sourceWatchList):
                                     print("not here")
-                                    WatchList.insert_FrMatch(self.request_obj, data, item.Id, bool(int(item.IsCro)), item.Name, float(item.MatchingThreshold))
+                                    WatchList.insert_FrMatch(self.request_obj, data, item.Id, float(item.MatchingThreshold))
                                 else:
                                     print("i am here")
-                                    WatchList.Insert_Details(self.request_obj, data, item.Id, bool(int(item.IsCro)), item.Name, float(item.MatchingThreshold))
+                                    MultiDBInsert.insert_FrMatch(self.request_obj, data, item.Id, bool(int(item.IsCro)), item.Name, float(item.MatchingThreshold))
                             else:
                                 print("data not found from", item.ApiEndPoint)
                         else:

@@ -2,6 +2,8 @@ import base64
 from FRecognition.exception import FRException
 import os, sys
 import pyodbc
+from FRecognition.Entity.entity_model import CheckStatusWatchList, CheckLogIdFilePathStatus
+
 
 
 def image_to_base64(image_path):
@@ -9,44 +11,6 @@ def image_to_base64(image_path):
             image_data = image_file.read()
             base64_encoded = base64.b64encode(image_data).decode('utf-8')
         return base64_encoded
-
-
-# def execute_stored_procedure(conn, procedure_name, *params):
-#     try:
-         
-#         cursor = conn.cursor()
-#         cursor.execute("EXEC " + procedure_name + " " + ",".join(["?"] * len(params)), params)
-#         rows = cursor.fetchall()
-#         cursor.close()
-#         return rows
-#     except Exception as e:
-#          raise FRException(e, sys)
-    
-    
-# def execute_stored_procedure1(conn,procedure_name, params=None):
-#      try:
-#         cursor = conn.cursor()
-#         if params:
-#             if isinstance(params, dict):
-#                 params = list(params.values())
-#             cursor.execute(f"EXEC {procedure_name} " + ', '.join(['?'] * len(params)), params)
-#         else:
-#             cursor.execute(f"EXEC {procedure_name}")
-        
-#         if cursor.description:
-#             data = cursor.fetchall()  # Adjust fetch method based on your need
-#         else:
-#             data = None
-
-#         conn.commit()
-#         return data
-
-#      except pyodbc.Error as e:
-#           raise FRException(e, sys)
-     
-#      finally:
-#         cursor.close()
-#         conn.close()
 
 
 def execute_stored_procedure(conn, procedure_name, params=None, fetch=False):
@@ -72,6 +36,7 @@ def execute_stored_procedure(conn, procedure_name, params=None, fetch=False):
         else:
             data = None
             conn.commit()  # Commit changes if any
+        
 
         return data
 
@@ -82,5 +47,52 @@ def execute_stored_procedure(conn, procedure_name, params=None, fetch=False):
     finally:
         # Clean up resources
         cursor.close()
-     
+
+
+
+
+def check_record_del_or_not(conn, valid_id):
+
+    obj = CheckStatusWatchList()
+
+    query = "SELECT FilePath, Status FROM WatchListFR WHERE FaceId = ?"
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, valid_id)
+        row = cursor.fetchone()
+        if row:
+            obj.file_path = row[0]
+            obj.status = row[1]
+        else:
+            print("No rows found.")
+
+        cursor.close()
     
+    except Exception as e:
+        raise FRException(e, sys)
+    
+    return obj
+
+
+def getPicPAthFromFrLOG(conn, LogId):
+
+    file = CheckLogIdFilePathStatus()
+
+    query = "SELECT FilePath FROM FRLog WHERE LogId = ?"
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, LogId)
+        row = cursor.fetchone()
+        if row:
+            file.file_path = row[0]
+        else:
+            print("No rows found.")
+
+        cursor.close()
+    
+    except Exception as e:
+        raise FRException(e, sys)
+    
+    return file
