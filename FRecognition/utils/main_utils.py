@@ -3,6 +3,9 @@ from FRecognition.exception import FRException
 import os, sys
 import pyodbc
 from FRecognition.Entity.entity_model import CheckStatusWatchList, CheckLogIdFilePathStatus
+from FRecognition.Entity.entity_model import NameandWatchListType, WatchListType, Cameralocation
+from FRecognition.constant import q_checkRecordDelOrNot, q_getPicPAthFromFrLOG
+from FRecognition.constant import q_getNameandWatchListType, q_getWatchListType, q_getCameralocation
 
 
 
@@ -55,7 +58,7 @@ def check_record_del_or_not(conn, valid_id):
 
     obj = CheckStatusWatchList()
 
-    query = "SELECT FilePath, Status FROM WatchListFR WHERE FaceId = ?"
+    query = q_checkRecordDelOrNot
 
     try:
         cursor = conn.cursor()
@@ -79,7 +82,7 @@ def getPicPAthFromFrLOG(conn, LogId):
 
     file = CheckLogIdFilePathStatus()
 
-    query = "SELECT FilePath FROM FRLog WHERE LogId = ?"
+    query = q_getPicPAthFromFrLOG
 
     try:
         cursor = conn.cursor()
@@ -96,3 +99,74 @@ def getPicPAthFromFrLOG(conn, LogId):
         raise FRException(e, sys)
     
     return file
+
+
+def GetNameandWatchListType(conn, faceId):
+
+    watchListData = NameandWatchListType()
+
+    query = q_getNameandWatchListType
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, faceId)
+        row = cursor.fetchone()
+        if row:
+            watchListData.type = row[0]
+            watchListData.name = row[1]
+        else:
+            print("No rows found.")
+
+        cursor.close()
+    
+    except Exception as e:
+        raise FRException(e, sys)
+    
+    return watchListData
+
+
+def GetWatchListType(conn, type):
+    
+    typeObj = WatchListType()
+
+    query = q_getWatchListType
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, type)
+        row = cursor.fetchone()
+
+        if row:
+            typeObj.txtval = row[0]
+        else:
+            print("No rows found.")
+
+        cursor.close()
+
+    except Exception as e:
+        raise FRException(e, sys)
+    
+    return typeObj
+
+
+def GetCameralocation(conn,camId):
+    camLocation = Cameralocation()
+    
+    query = q_getCameralocation
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute(query, type)
+        row = cursor.fetchone()
+
+        if row:
+            camLocation.location = row[0]
+        else:
+            print("No rows found.")
+
+        cursor.close()
+
+    except Exception as e:
+        raise FRException(e, sys)
+    
+    return camLocation
